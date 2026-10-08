@@ -1,0 +1,313 @@
+@import "tailwindcss";
+
+:root {
+  --background: #0a1128;
+  --foreground: #f8fafc;
+  --font-serif-family: var(--font-serif), Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-sans-family: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
+  --font-script-family: var(--font-script), "Brush Script MT", cursive;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-sans-family);
+  --font-serif: var(--font-serif-family);
+  --font-script: var(--font-script-family);
+
+  --color-navy-950: #050b18;
+  --color-navy-900: #0a1128;
+  --color-navy-850: #0d1633;
+  --color-navy-800: #111d42;
+  --color-navy-700: #1a2a5e;
+  --color-navy-600: #263c80;
+
+  --color-gold-300: #fae49d;
+  --color-gold-400: #eec968;
+  --color-gold-500: #d4af37;
+  --color-gold-600: #ba9324;
+  --color-gold-700: #937316;
+
+  --color-cream-50: #faf8f5;
+  --color-cream-100: #f5f0e6;
+  --color-cream-200: #eee5d3;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: clip;
+  width: 100%;
+  max-width: 100%;
+  scrollbar-gutter: stable;
+  scroll-padding-top: 90px;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans-family);
+  overflow-x: clip;
+  width: 100%;
+  max-width: 100%;
+}
+
+.font-serif {
+  font-family: var(--font-serif-family);
+}
+
+.font-script {
+  font-family: var(--font-script), "Brush Script MT", cursive;
+}
+
+/* Handwritten gold lettering that holds up on its own — keeps the original fine strokes,
+   no badge, box or outline. Legibility comes from a luminous, near-white gold (strong
+   contrast against warm city lights) and a stacked soft shadow: a tight one that defines
+   each hairline stroke plus wider falloffs that quietly darken the busy photo beneath. */
+.script-gold,
+.script-gold-on-light {
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+/* On navy / photography */
+.script-gold {
+  background-image: linear-gradient(180deg, #fffaf0 0%, #fbe7b0 40%, #f2cd6e 100%);
+  filter: drop-shadow(0 1px 1.5px rgba(3, 6, 16, 0.9)) drop-shadow(0 2px 6px rgba(3, 6, 16, 0.65))
+    drop-shadow(0 6px 22px rgba(5, 10, 24, 0.6));
+}
+/* On the cream background */
+.script-gold-on-light {
+  background-image: linear-gradient(180deg, #c99a22 0%, #a87a0c 50%, #7f5b08 100%);
+  filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.95)) drop-shadow(0 2px 5px rgba(127, 91, 8, 0.28));
+}
+/* Ink signature on cream (fine strokes kept as designed) */
+.script-ink {
+  filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.8));
+}
+
+/* Body copy is justified from tablet width up. On phones the measure is too narrow and
+   justification opens wide rivers between words, so it stays left-aligned there. Kept in
+   the base layer so text-center / text-right utilities still win. */
+@layer base {
+  /* Words are never split with a hyphen (e.g. "fac-tories") */
+  p {
+    hyphens: manual;
+  }
+  @media (min-width: 640px) {
+    p {
+      text-align: justify;
+      text-justify: inter-word;
+    }
+  }
+  /* …but paragraphs inside centred / right-aligned blocks keep that alignment */
+  [class*="text-center"] p {
+    text-align: center;
+  }
+  [class*="text-right"] p {
+    text-align: right;
+  }
+  /* Uppercase eyebrows / labels are never stretched */
+  p.uppercase {
+    text-align: inherit;
+  }
+}
+
+/* ── Scroll reveal (driven by components/layout/MotionManager.js) ──────────────
+   Until the manager has tagged the page, `main` stays hidden so content doesn't flash
+   before animating (an inline head script adds .rv-js and a safety timeout adds .rv-ready). */
+html.rv-js:not(.rv-ready) main {
+  opacity: 0;
+}
+[data-reveal].rv-hidden {
+  opacity: 0;
+}
+/* Keyframes only define the start state and use `backwards` fill, so once finished every
+   element returns to its own styles (hover transitions, rotations, filters untouched). */
+[data-reveal].rv-in {
+  animation-duration: 0.95s;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  animation-delay: var(--rv-delay, 0ms);
+  animation-fill-mode: backwards;
+}
+/* Text / item entrances */
+[data-reveal="fade-up"].rv-in { animation-name: rv-fade-up; }
+[data-reveal="fade-down"].rv-in { animation-name: rv-fade-down; }
+[data-reveal="slide-left"].rv-in { animation-name: rv-slide-left; }
+[data-reveal="slide-right"].rv-in { animation-name: rv-slide-right; }
+[data-reveal="zoom-in"].rv-in { animation-name: rv-zoom-in; }
+[data-reveal="blur-up"].rv-in { animation-name: rv-blur-up; }
+[data-reveal="tilt-up"].rv-in { animation-name: rv-tilt-up; }
+[data-reveal="flip-up"].rv-in { animation-name: rv-flip-up; }
+[data-reveal="rise"].rv-in { animation-name: rv-rise; }
+[data-reveal="swing"].rv-in { animation-name: rv-swing; }
+/* Photo entrances: slow zoom-out, or a curtain wipe */
+[data-reveal^="media"].rv-in { animation-duration: 1.35s; }
+[data-reveal="media-zoom"].rv-in { animation-name: rv-media-zoom; }
+[data-reveal="media-wipe-left"].rv-in { animation-name: rv-media-wipe-left; }
+[data-reveal="media-wipe-right"].rv-in { animation-name: rv-media-wipe-right; }
+[data-reveal="media-wipe-up"].rv-in { animation-name: rv-media-wipe-up; }
+
+@keyframes rv-fade-up { from { opacity: 0; transform: translate3d(0, 40px, 0); } }
+@keyframes rv-fade-down { from { opacity: 0; transform: translate3d(0, -32px, 0); } }
+@keyframes rv-slide-left { from { opacity: 0; transform: translate3d(-60px, 0, 0); } }
+@keyframes rv-slide-right { from { opacity: 0; transform: translate3d(60px, 0, 0); } }
+@keyframes rv-zoom-in { from { opacity: 0; transform: scale(0.88); } }
+@keyframes rv-blur-up { from { opacity: 0; filter: blur(10px); transform: translate3d(0, 24px, 0); } }
+@keyframes rv-tilt-up { from { opacity: 0; transform: perspective(900px) rotateX(18deg) translate3d(0, 40px, 0); } }
+@keyframes rv-flip-up { from { opacity: 0; transform: perspective(900px) rotateY(-14deg) translate3d(0, 30px, 0) scale(0.95); } }
+@keyframes rv-rise { from { opacity: 0; transform: translate3d(0, 60px, 0) scale(0.94); } }
+@keyframes rv-swing { from { opacity: 0; transform: translate3d(0, 50px, 0) rotate(-2.5deg) scale(0.94); } }
+@keyframes rv-media-zoom { from { opacity: 0; transform: scale(1.12); } }
+@keyframes rv-media-wipe-left { from { opacity: 0.2; clip-path: inset(0 100% 0 0); transform: scale(1.06); } }
+@keyframes rv-media-wipe-right { from { opacity: 0.2; clip-path: inset(0 0 0 100%); transform: scale(1.06); } }
+@keyframes rv-media-wipe-up { from { opacity: 0.2; clip-path: inset(100% 0 0 0); transform: scale(1.06); } }
+
+
+/* 1920px design frame: edge-bleeding photos anchor to this frame instead of the window,
+   so on very wide screens or when zoomed out they stay beside the content at 100% scale. */
+.frame-left {
+  left: max(0px, calc(50% - 960px));
+}
+.frame-right {
+  right: max(0px, calc(50% - 960px));
+}
+/* Mask pair set by frameFeather(): the outer edge only dissolves once it no longer meets
+   the window edge (window wider than the 1920px frame, e.g. browser zoomed out). */
+.frame-mask {
+  -webkit-mask-image: var(--mask-base);
+  mask-image: var(--mask-base);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}
+/* Full-bleed photos that drop their side fade on phones / tablets */
+@media (max-width: 1023.98px) {
+  .frame-mask.mask-off-mobile {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+}
+@media (min-width: 1921px) {
+  .frame-mask {
+    -webkit-mask-image: var(--mask-wide);
+    mask-image: var(--mask-wide);
+  }
+}
+
+/* Widescreen Container Utility matching high-end editorial scale */
+.container-x {
+  width: 100%;
+  max-width: 1440px;
+  margin-inline: auto;
+  padding-inline: 1rem;
+}
+
+@media (min-width: 640px) {
+  .container-x {
+    padding-inline: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container-x {
+    padding-inline: 2.5rem;
+  }
+}
+
+@media (min-width: 1440px) {
+  .container-x {
+    padding-inline: 3rem;
+  }
+}
+
+/* Luxury Gold Gradients & Effects */
+.bg-gold-gradient {
+  background: linear-gradient(135deg, #f5d77f 0%, #d4af37 50%, #b8860b 100%);
+}
+
+.bg-gold-gradient-hover {
+  background: linear-gradient(135deg, #fae49d 0%, #e0bd49 50%, #c99516 100%);
+}
+
+.text-gold-gradient {
+  background: linear-gradient(135deg, #fae49d 0%, #d4af37 60%, #b8860b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.border-gold-subtle {
+  border-color: rgba(212, 175, 55, 0.25);
+}
+
+.glass-navy {
+  background: rgba(10, 17, 40, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+/* Header capsule: light frosted glass that re-tints to whatever is scrolling behind it */
+.glass-capsule {
+  background: rgba(10, 17, 40, 0.32);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  border: 1px solid rgba(212, 175, 55, 0.28);
+  box-shadow: 0 8px 28px -8px rgba(0, 0, 0, 0.35);
+  transition: background-color 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease;
+}
+
+/* Over dark sections after scrolling */
+.glass-capsule-scrolled {
+  background: rgba(10, 17, 40, 0.55);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  box-shadow: 0 10px 32px -8px rgba(0, 0, 0, 0.45), 0 0 18px 0 rgba(212, 175, 55, 0.1);
+}
+
+/* Over light (cream) sections */
+.glass-capsule-light {
+  background: rgba(250, 248, 245, 0.84);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  box-shadow: 0 10px 30px -10px rgba(120, 95, 40, 0.22);
+}
+
+.shadow-luxury-gold {
+  box-shadow: 0 10px 30px -10px rgba(212, 175, 55, 0.35);
+}
+
+.shadow-luxury-deep {
+  box-shadow: 0 20px 40px -15px rgba(5, 11, 24, 0.5);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
